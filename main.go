@@ -1,9 +1,22 @@
 package main
 
-import "fmt"
+import (
+	"bufio"
+	"fmt"
+	"os"
+)
 
 func main() {
-	eval("a=1+3;b=a+a;?b;")
+	repl()
+}
+
+func repl() {
+	reader := bufio.NewReader(os.Stdin)
+	for {
+		fmt.Print("> ")
+		line, _ := reader.ReadString('\n')
+		eval(line)
+	}
 }
 
 func eval(s string) {
@@ -13,7 +26,7 @@ func eval(s string) {
 	}
 
 	for i := 0; i < len(s); i += 1 {
-		if s[i] == ';' {
+		if s[i] == ';' || s[i] == '\n' {
 			i += 1
 			continue
 		}

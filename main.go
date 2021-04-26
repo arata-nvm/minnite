@@ -11,20 +11,20 @@ func main() {
 }
 
 func repl() {
-	reader := bufio.NewReader(os.Stdin)
-	for {
-		fmt.Print("> ")
-		line, _ := reader.ReadString('\n')
-		eval(line)
-	}
-}
-
-func eval(s string) {
 	var vars [256]int
 	for i := 0; i < 10; i += 1 {
 		vars['0'+i] = i
 	}
 
+	reader := bufio.NewReader(os.Stdin)
+	for {
+		fmt.Print("> ")
+		line, _ := reader.ReadString('\n')
+		eval(line, vars[:])
+	}
+}
+
+func eval(s string, vars []int) {
 	for i := 0; i < len(s); i += 1 {
 		if s[i] == ';' || s[i] == '\n' {
 			i += 1

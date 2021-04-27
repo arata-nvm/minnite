@@ -4,6 +4,9 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+
+	"github.com/alecthomas/participle/v2/lexer"
+	"github.com/alecthomas/participle/v2/lexer/stateful"
 )
 
 func main() {
@@ -20,8 +23,30 @@ func repl() {
 	for {
 		fmt.Print("> ")
 		line, _ := reader.ReadString('\n')
-		eval(line, vars[:])
+		tokens := tokenize(line)
+		fmt.Printf("%+v\n", tokens)
 	}
+}
+
+func tokenize(s string) []lexer.Token {
+	lexerDef := stateful.MustSimple([]stateful.Rule{
+		{`Ident`, `[a-zA-Z][a-zA-Z_\d]*`, nil},
+		{`Number`, `\d+`, nil},
+		{`Punct`, `[+\-*/!=?;]`, nil},
+		{"whitespace", `[\n\r\s]+`, nil},
+	})
+
+	var tokens []lexer.Token
+	l, _ := lexerDef.LexString("", s)
+	for {
+		token, _ := l.Next()
+		tokens = append(tokens, token)
+		if token.EOF() {
+			break
+		}
+	}
+
+	return tokens
 }
 
 func eval(s string, vars []int) {

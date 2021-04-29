@@ -38,14 +38,14 @@ func main() {
 }
 
 func repl() {
-	// vars := map[string]int{}
+	ctx := map[string]int{}
 
 	reader := bufio.NewReader(os.Stdin)
 	for {
 		fmt.Print("> ")
 		line, _ := reader.ReadString('\n')
 		ast := parse(line)
-		fmt.Printf("%#v\n", ast)
+		ast.eval(ctx)
 	}
 }
 
@@ -65,4 +65,41 @@ func parse(s string) *Program {
 	parser.ParseString("", s, program)
 
 	return program
+}
+
+type Context map[string]int
+
+func (p *Program) eval(ctx Context) {
+	for _, stmt := range p.Statements {
+		stmt.eval(ctx)
+	}
+}
+
+func (s *Statement) eval(ctx Context) {
+	switch {
+	case s.Let != nil:
+		s.Let.eval(ctx)
+	case s.Print != nil:
+		s.Print.eval(ctx)
+	}
+}
+
+func (s *LetStatement) eval(ctx Context) {
+	ctx[s.Variable] = s.Value.eval(ctx)
+}
+
+func (s *PrintStatement) eval(ctx Context) {
+	fmt.Printf("%d\n", s.Value.eval(ctx))
+
+}
+
+func (t *Term) eval(ctx Context) int {
+	switch {
+	case t.Variable != nil:
+		return ctx[*t.Variable]
+	case t.Number != nil:
+		return *t.Number
+	}
+
+	return 0
 }

@@ -8,6 +8,7 @@ type Statement struct {
 	Let        *LetStatement        `( @@ `
 	Print      *PrintStatement      `| @@ `
 	If         *IfStatement         `| @@ `
+	While      *WhileStatement      `| @@ `
 	Expression *ExpressionStatement `| @@ ) ";"`
 }
 
@@ -32,6 +33,11 @@ type IfStatement struct {
 	Cond *Expression     `"if" @@ `
 	Then *BlockStatement `@@`
 	Else *BlockStatement `[ "else" @@ ]`
+}
+
+type WhileStatement struct {
+	Cond *Expression     `"while" @@ `
+	Body *BlockStatement `@@`
 }
 
 type Expression struct {

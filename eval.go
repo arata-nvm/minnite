@@ -22,6 +22,8 @@ func (s *Statement) Eval(ctx Context) int {
 		s.Print.Eval(ctx)
 	case s.If != nil:
 		return s.If.Eval(ctx)
+	case s.While != nil:
+		s.While.Eval(ctx)
 	case s.Expression != nil:
 		return s.Expression.Eval(ctx)
 	}
@@ -58,6 +60,18 @@ func (s *IfStatement) Eval(ctx Context) int {
 	}
 
 	return result
+}
+
+func (s *WhileStatement) Eval(ctx Context) {
+	for {
+		cond := s.Cond.Eval(ctx)
+		if cond == 0 {
+			break
+		}
+
+		s.Body.Eval(ctx)
+	}
+
 }
 
 func (s *ExpressionStatement) Eval(ctx Context) int {

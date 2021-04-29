@@ -20,6 +20,8 @@ func TestExec(t *testing.T) {
 		{"1 < 1;", 0},
 		{"1 <= 1;", 1},
 		{"let hoge = 2; hoge;", 2},
+		{"if 1 == 1 { 2; };", 2},
+		{"if 1 != 1 { 2; };", 0},
 	}
 
 	for _, test := range tests {

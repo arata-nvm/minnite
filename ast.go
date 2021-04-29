@@ -7,6 +7,7 @@ type Program struct {
 type Statement struct {
 	Let        *LetStatement        `( @@ `
 	Print      *PrintStatement      `| @@ `
+	If         *IfStatement         `| @@ `
 	Expression *ExpressionStatement `| @@ ) ";"`
 }
 
@@ -21,6 +22,11 @@ type PrintStatement struct {
 
 type ExpressionStatement struct {
 	Expression *Expression `@@`
+}
+
+type IfStatement struct {
+	Cond *Expression  `"if" @@ "{"`
+	Body []*Statement `@@* "}"`
 }
 
 type Expression struct {

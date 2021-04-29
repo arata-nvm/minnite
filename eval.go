@@ -20,6 +20,8 @@ func (s *Statement) Eval(ctx Context) int {
 		s.Let.Eval(ctx)
 	case s.Print != nil:
 		s.Print.Eval(ctx)
+	case s.If != nil:
+		return s.If.Eval(ctx)
 	case s.Expression != nil:
 		return s.Expression.Eval(ctx)
 	}
@@ -33,6 +35,19 @@ func (s *LetStatement) Eval(ctx Context) {
 
 func (s *PrintStatement) Eval(ctx Context) {
 	fmt.Printf("%d\n", s.Value.Eval(ctx))
+}
+
+func (s *IfStatement) Eval(ctx Context) int {
+	cond := s.Cond.Eval(ctx)
+	result := 0
+
+	if cond != 0 {
+		for _, stmt := range s.Body {
+			result = stmt.Eval(ctx)
+		}
+	}
+
+	return result
 }
 
 func (s *ExpressionStatement) Eval(ctx Context) int {

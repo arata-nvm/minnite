@@ -30,7 +30,7 @@ func parse(s string) *Program {
 	lexerDef := stateful.MustSimple([]stateful.Rule{
 		{`Ident`, `[a-zA-Z][a-zA-Z_\d]*`, nil},
 		{`Number`, `\d+`, nil},
-		{`Punct`, `[+\-*/!=?;]`, nil},
+		{`Punct`, `[+\-*/%!=?;]`, nil},
 		{"whitespace", `[\n\r\s]+`, nil},
 	})
 

@@ -55,6 +55,8 @@ func (e *MultiplicationExpression) Eval(ctx Context) int {
 			lhs *= rhs.Term.Eval(ctx)
 		case "/":
 			lhs /= rhs.Term.Eval(ctx)
+		case "%":
+			lhs %= rhs.Term.Eval(ctx)
 		}
 	}
 

@@ -11,6 +11,10 @@ type Statement struct {
 	Expression *ExpressionStatement `| @@ ) ";"`
 }
 
+type BlockStatement struct {
+	Body []*Statement `"{" @@* "}"`
+}
+
 type LetStatement struct {
 	Variable string      `"let" @Ident`
 	Value    *Expression `"=" @@`
@@ -25,8 +29,9 @@ type ExpressionStatement struct {
 }
 
 type IfStatement struct {
-	Cond *Expression  `"if" @@ "{"`
-	Body []*Statement `@@* "}"`
+	Cond *Expression     `"if" @@ `
+	Then *BlockStatement `@@`
+	Else *BlockStatement `[ "else" @@ ]`
 }
 
 type Expression struct {

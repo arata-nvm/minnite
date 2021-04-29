@@ -29,6 +29,16 @@ func (s *Statement) Eval(ctx Context) int {
 	return 0
 }
 
+func (s *BlockStatement) Eval(ctx Context) int {
+	result := 0
+
+	for _, stmt := range s.Body {
+		result = stmt.Eval(ctx)
+	}
+
+	return result
+}
+
 func (s *LetStatement) Eval(ctx Context) {
 	ctx[s.Variable] = s.Value.Eval(ctx)
 }
@@ -42,9 +52,9 @@ func (s *IfStatement) Eval(ctx Context) int {
 	result := 0
 
 	if cond != 0 {
-		for _, stmt := range s.Body {
-			result = stmt.Eval(ctx)
-		}
+		result = s.Then.Eval(ctx)
+	} else if s.Else != nil {
+		result = s.Else.Eval(ctx)
 	}
 
 	return result

@@ -37,9 +37,22 @@ func (e *AdditionExpression) Eval(ctx Context) int {
 	for _, rhs := range e.Rhs {
 		switch *rhs.Op {
 		case "+":
-			lhs += rhs.Term.Eval(ctx)
+			lhs += rhs.Mul.Eval(ctx)
 		case "-":
-			lhs -= rhs.Term.Eval(ctx)
+			lhs -= rhs.Mul.Eval(ctx)
+		}
+	}
+
+	return lhs
+}
+
+func (e *MultiplicationExpression) Eval(ctx Context) int {
+	lhs := e.Lhs.Eval(ctx)
+
+	for _, rhs := range e.Rhs {
+		switch *rhs.Op {
+		case "*":
+			lhs *= rhs.Term.Eval(ctx)
 		}
 	}
 

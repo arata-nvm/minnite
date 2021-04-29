@@ -38,7 +38,7 @@ type MultiplicationExpression struct {
 }
 
 type OpMultiplicationExpression struct {
-	Op   *string         `@"*"`
+	Op   *string         `@("*" | "/")`
 	Term *TermExpression `@@`
 }
 

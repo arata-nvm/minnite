@@ -40,7 +40,10 @@ func parse(s string) *Program {
 		log.Fatal(err)
 	}
 	program := &Program{}
-	parser.ParseString("", s, program)
+	err = parser.ParseString("", s, program)
+	if err != nil {
+		fmt.Print(err)
+	}
 
 	return program
 }

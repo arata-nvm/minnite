@@ -5,8 +5,9 @@ type Program struct {
 }
 
 type Statement struct {
-	Let   *LetStatement   `( @@ `
-	Print *PrintStatement `| @@ ) ";"`
+	Let        *LetStatement        `( @@ `
+	Print      *PrintStatement      `| @@ `
+	Expression *ExpressionStatement `| @@ ) ";"`
 }
 
 type LetStatement struct {
@@ -16,6 +17,10 @@ type LetStatement struct {
 
 type PrintStatement struct {
 	Value *Expression `"print" @@`
+}
+
+type ExpressionStatement struct {
+	Expression *Expression `@@`
 }
 
 type Expression struct {

@@ -4,19 +4,27 @@ import "fmt"
 
 type Context map[string]int
 
-func (p *Program) Eval(ctx Context) {
+func (p *Program) Eval(ctx Context) int {
+	result := 0
+
 	for _, stmt := range p.Statements {
-		stmt.Eval(ctx)
+		result = stmt.Eval(ctx)
 	}
+
+	return result
 }
 
-func (s *Statement) Eval(ctx Context) {
+func (s *Statement) Eval(ctx Context) int {
 	switch {
 	case s.Let != nil:
 		s.Let.Eval(ctx)
 	case s.Print != nil:
 		s.Print.Eval(ctx)
+	case s.Expression != nil:
+		return s.Expression.Eval(ctx)
 	}
+
+	return 0
 }
 
 func (s *LetStatement) Eval(ctx Context) {
@@ -25,6 +33,10 @@ func (s *LetStatement) Eval(ctx Context) {
 
 func (s *PrintStatement) Eval(ctx Context) {
 	fmt.Printf("%d\n", s.Value.Eval(ctx))
+}
+
+func (s *ExpressionStatement) Eval(ctx Context) int {
+	return s.Expression.Eval(ctx)
 }
 
 func (e *Expression) Eval(ctx Context) int {

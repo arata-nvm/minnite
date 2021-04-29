@@ -10,15 +10,25 @@ type Statement struct {
 }
 
 type LetStatement struct {
-	Variable string `"let" @Ident`
-	Value    *Term  `"=" @@`
+	Variable string      `"let" @Ident`
+	Value    *Expression `"=" @@`
 }
 
 type PrintStatement struct {
-	Value *Term `"print" @@`
+	Value *Expression `"print" @@`
 }
 
-type Term struct {
+type Expression struct {
+	Expression *AdditionExpression `@@`
+}
+
+type AdditionExpression struct {
+	Lhs *TermExpression `@@`
+	Op  *string         `[ @"+"`
+	Rhs *TermExpression `  @@ ]`
+}
+
+type TermExpression struct {
 	Variable *string `@Ident`
 	Number   *int    `| @Number`
 }

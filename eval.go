@@ -25,10 +25,25 @@ func (s *LetStatement) Eval(ctx Context) {
 
 func (s *PrintStatement) Eval(ctx Context) {
 	fmt.Printf("%d\n", s.Value.Eval(ctx))
-
 }
 
-func (t *Term) Eval(ctx Context) int {
+func (e *Expression) Eval(ctx Context) int {
+	return e.Expression.Eval(ctx)
+}
+
+func (e *AdditionExpression) Eval(ctx Context) int {
+	lhs := e.Lhs.Eval(ctx)
+	if e.Op != nil && e.Rhs != nil {
+		switch {
+		case *e.Op == "+":
+			lhs += e.Rhs.Eval(ctx)
+		}
+	}
+
+	return lhs
+}
+
+func (t *TermExpression) Eval(ctx Context) int {
 	switch {
 	case t.Variable != nil:
 		return ctx[*t.Variable]

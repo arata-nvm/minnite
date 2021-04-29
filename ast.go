@@ -28,7 +28,7 @@ type AdditionExpression struct {
 }
 
 type OpAdditionExpression struct {
-	Op   *string         `@"+"`
+	Op   *string         `@("+" | "-")`
 	Term *TermExpression `  @@`
 }
 

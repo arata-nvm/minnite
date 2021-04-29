@@ -31,6 +31,37 @@ func (e *Expression) Eval(ctx Context) int {
 	return e.Expression.Eval(ctx)
 }
 
+func (e *ComparisonExpression) Eval(ctx Context) int {
+	lhs := e.Lhs.Eval(ctx)
+	if e.Op == nil {
+		return lhs
+	}
+
+	rhs := e.Rhs.Eval(ctx)
+
+	var result bool
+	switch *e.Op {
+	case "==":
+		result = lhs == rhs
+	case "!=":
+		result = lhs != rhs
+	case "<":
+		result = lhs < rhs
+	case "<=":
+		result = lhs <= rhs
+	case ">":
+		result = lhs > rhs
+	case ">=":
+		result = lhs >= rhs
+	}
+
+	if result {
+		return 1
+	} else {
+		return 0
+	}
+}
+
 func (e *AdditionExpression) Eval(ctx Context) int {
 	lhs := e.Lhs.Eval(ctx)
 

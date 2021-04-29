@@ -19,7 +19,13 @@ type PrintStatement struct {
 }
 
 type Expression struct {
-	Expression *AdditionExpression `@@`
+	Expression *ComparisonExpression `@@`
+}
+
+type ComparisonExpression struct {
+	Lhs *AdditionExpression `@@`
+	Op  *string             `[ @Operator`
+	Rhs *AdditionExpression `  @@ ]`
 }
 
 type AdditionExpression struct {

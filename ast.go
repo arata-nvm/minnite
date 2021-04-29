@@ -43,6 +43,7 @@ type OpMultiplicationExpression struct {
 }
 
 type TermExpression struct {
-	Variable *string `@Ident`
-	Number   *int    `| @Number`
+	Variable   *string     `@Ident`
+	Number     *int        `| @Number`
+	Expression *Expression `| ( "(" @@ ")" )`
 }

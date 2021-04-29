@@ -69,6 +69,8 @@ func (t *TermExpression) Eval(ctx Context) int {
 		return ctx[*t.Variable]
 	case t.Number != nil:
 		return *t.Number
+	case t.Expression != nil:
+		return t.Expression.Eval(ctx)
 	}
 
 	return 0

@@ -23,9 +23,13 @@ type Expression struct {
 }
 
 type AdditionExpression struct {
-	Lhs *TermExpression `@@`
-	Op  *string         `[ @"+"`
-	Rhs *TermExpression `  @@ ]`
+	Lhs *TermExpression         `@@`
+	Rhs []*OpAdditionExpression `@@*`
+}
+
+type OpAdditionExpression struct {
+	Op   *string         `@"+"`
+	Term *TermExpression `  @@`
 }
 
 type TermExpression struct {

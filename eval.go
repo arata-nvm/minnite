@@ -33,10 +33,12 @@ func (e *Expression) Eval(ctx Context) int {
 
 func (e *AdditionExpression) Eval(ctx Context) int {
 	lhs := e.Lhs.Eval(ctx)
-	if e.Op != nil && e.Rhs != nil {
+
+	for _, rhs := range e.Rhs {
 		switch {
-		case *e.Op == "+":
-			lhs += e.Rhs.Eval(ctx)
+		case *rhs.Op == "+":
+			lhs += rhs.Term.Eval(ctx)
+
 		}
 	}
 

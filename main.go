@@ -21,10 +21,14 @@ func repl() {
 	for {
 		fmt.Print("> ")
 		line, _ := reader.ReadString('\n')
-		ast := parse(line)
-		result := ast.Eval(ctx)
+		result := Exec(line, ctx)
 		fmt.Printf("%d\n", result)
 	}
+}
+
+func Exec(s string, ctx Context) int {
+	program := parse(s)
+	return program.Eval(ctx)
 }
 
 func parse(s string) *Program {

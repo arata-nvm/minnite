@@ -173,6 +173,8 @@ func (t *TermExpression) Eval(ctx Context) Value {
 		return t.Expression.Eval(ctx)
 	case t.Function != nil:
 		return t.Function.Eval(ctx)
+	case t.Call != nil:
+		return t.Call.Eval(ctx)
 	}
 
 	panic("unreachable")
@@ -180,4 +182,9 @@ func (t *TermExpression) Eval(ctx Context) Value {
 
 func (f *FunctionExpression) Eval(ctx Context) Value {
 	return NewFunction(f.Body)
+}
+
+func (c *CallExpression) Eval(ctx Context) Value {
+	f := ctx[*c.Name].(*Function)
+	return f.Body.Eval(ctx)
 }

@@ -78,10 +78,15 @@ type OpMultiplicationExpression struct {
 type TermExpression struct {
 	Expression *Expression         `( "(" @@ ")" )`
 	Function   *FunctionExpression `| @@`
+	Call       *CallExpression     `| @@`
 	Variable   *string             `| @Ident`
 	Number     *int                `| @Number`
 }
 
 type FunctionExpression struct {
 	Body *BlockStatement `"func" "(" ")" @@`
+}
+
+type CallExpression struct {
+	Name *string `@Ident "(" ")"`
 }

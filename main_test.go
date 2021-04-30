@@ -26,6 +26,7 @@ func TestExec(t *testing.T) {
 		{"if 1 != 1 { 2; } else { 3; }", NewInteger(3)},
 		{"let i = 0; let sum = 0; while i < 10 { let sum = sum + i; let i = i + 1; }; sum;", NewInteger(45)},
 		{"return 42;", NewInteger(42)},
+		{"let hoge = func() { return 42; }; hoge();", NewInteger(42)},
 	}
 
 	for _, test := range tests {

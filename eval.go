@@ -5,7 +5,7 @@ import "fmt"
 type Context map[string]Value
 
 func (p *Program) Eval(ctx Context) Value {
-	result := NewInteger(0)
+	result := NewVoid()
 
 	for _, stmt := range p.Statements {
 		result = stmt.Eval(ctx)
@@ -17,22 +17,22 @@ func (p *Program) Eval(ctx Context) Value {
 func (s *Statement) Eval(ctx Context) Value {
 	switch {
 	case s.Let != nil:
-		s.Let.Eval(ctx)
+		return s.Let.Eval(ctx)
 	case s.Print != nil:
-		s.Print.Eval(ctx)
+		return s.Print.Eval(ctx)
 	case s.If != nil:
 		return s.If.Eval(ctx)
 	case s.While != nil:
-		s.While.Eval(ctx)
+		return s.While.Eval(ctx)
 	case s.Expression != nil:
 		return s.Expression.Eval(ctx)
 	}
 
-	return NewInteger(0)
+	panic("unreachable")
 }
 
 func (s *BlockStatement) Eval(ctx Context) Value {
-	result := NewInteger(0)
+	result := NewVoid()
 
 	for _, stmt := range s.Body {
 		result = stmt.Eval(ctx)
@@ -41,17 +41,19 @@ func (s *BlockStatement) Eval(ctx Context) Value {
 	return result
 }
 
-func (s *LetStatement) Eval(ctx Context) {
+func (s *LetStatement) Eval(ctx Context) Value {
 	ctx[s.Variable] = s.Value.Eval(ctx)
+	return NewVoid()
 }
 
-func (s *PrintStatement) Eval(ctx Context) {
+func (s *PrintStatement) Eval(ctx Context) Value {
 	fmt.Printf("%d\n", s.Value.Eval(ctx))
+	return NewVoid()
 }
 
 func (s *IfStatement) Eval(ctx Context) Value {
 	cond := s.Cond.Eval(ctx).(Integer)
-	result := NewInteger(0)
+	result := NewVoid()
 
 	if cond != 0 {
 		result = s.Then.Eval(ctx)
@@ -62,7 +64,7 @@ func (s *IfStatement) Eval(ctx Context) Value {
 	return result
 }
 
-func (s *WhileStatement) Eval(ctx Context) {
+func (s *WhileStatement) Eval(ctx Context) Value {
 	for {
 		cond := s.Cond.Eval(ctx).(Integer)
 		if cond == 0 {
@@ -72,6 +74,7 @@ func (s *WhileStatement) Eval(ctx Context) {
 		s.Body.Eval(ctx)
 	}
 
+	return NewVoid()
 }
 
 func (s *ExpressionStatement) Eval(ctx Context) Value {
@@ -159,5 +162,5 @@ func (t *TermExpression) Eval(ctx Context) Value {
 		return t.Expression.Eval(ctx)
 	}
 
-	return NewInteger(0)
+	panic("unreachable")
 }

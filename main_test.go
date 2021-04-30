@@ -7,30 +7,30 @@ import (
 func TestExec(t *testing.T) {
 	tests := []struct {
 		input    string
-		expected int
+		expected Value
 	}{
-		{"42;", 42},
-		{"1 + 2 * 3;", 7},
-		{"(1 + 2) * 3;", 9},
-		{"5 / 2 + 5 % 2;", 3},
-		{"1 == 1;", 1},
-		{"1 != 1;", 0},
-		{"1 < 1;", 0},
-		{"1 <= 1;", 1},
-		{"1 < 1;", 0},
-		{"1 <= 1;", 1},
-		{"let hoge = 2; hoge;", 2},
-		{"if 1 == 1 { 2; };", 2},
-		{"if 1 != 1 { 2; };", 0},
-		{"if 1 == 1 { 2; } else { 3; }", 2},
-		{"if 1 != 1 { 2; } else { 3; }", 3},
-		{"let i = 0; let sum = 0; while i < 10 { let sum = sum + i; let i = i + 1; }; sum;", 45},
+		{"42;", NewInteger(42)},
+		{"1 + 2 * 3;", NewInteger(7)},
+		{"(1 + 2) * 3;", NewInteger(9)},
+		{"5 / 2 + 5 % 2;", NewInteger(3)},
+		{"1 == 1;", NewInteger(1)},
+		{"1 != 1;", NewInteger(0)},
+		{"1 < 1;", NewInteger(0)},
+		{"1 <= 1;", NewInteger(1)},
+		{"1 < 1;", NewInteger(0)},
+		{"1 <= 1;", NewInteger(1)},
+		{"let hoge = 2; hoge;", NewInteger(2)},
+		{"if 1 == 1 { 2; };", NewInteger(2)},
+		{"if 1 != 1 { 2; };", NewVoid()},
+		{"if 1 == 1 { 2; } else { 3; }", NewInteger(2)},
+		{"if 1 != 1 { 2; } else { 3; }", NewInteger(3)},
+		{"let i = 0; let sum = 0; while i < 10 { let sum = sum + i; let i = i + 1; }; sum;", NewInteger(45)},
 	}
 
 	for _, test := range tests {
 		ctx := Context{}
-		actual := Exec(test.input, ctx).(Integer)
-		if int(actual) != test.expected {
+		actual := Exec(test.input, ctx)
+		if actual != test.expected {
 			t.Errorf("[FAILED] `%s` -> %d\n", test.input, actual)
 		}
 	}

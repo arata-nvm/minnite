@@ -24,6 +24,8 @@ func (s *Statement) Eval(ctx Context) Value {
 		return s.If.Eval(ctx)
 	case s.While != nil:
 		return s.While.Eval(ctx)
+	case s.Return != nil:
+		return s.Return.Eval(ctx)
 	case s.Expression != nil:
 		return s.Expression.Eval(ctx)
 	}
@@ -36,6 +38,10 @@ func (s *BlockStatement) Eval(ctx Context) Value {
 
 	for _, stmt := range s.Body {
 		result = stmt.Eval(ctx)
+
+		if stmt.Return != nil {
+			break
+		}
 	}
 
 	return result
@@ -75,6 +81,10 @@ func (s *WhileStatement) Eval(ctx Context) Value {
 	}
 
 	return NewVoid()
+}
+
+func (s *ReturnStatement) Eval(ctx Context) Value {
+	return s.Value.Eval(ctx)
 }
 
 func (s *ExpressionStatement) Eval(ctx Context) Value {

@@ -9,6 +9,7 @@ type Statement struct {
 	Print      *PrintStatement      `| @@ `
 	If         *IfStatement         `| @@ `
 	While      *WhileStatement      `| @@ `
+	Return     *ReturnStatement     `| @@ `
 	Expression *ExpressionStatement `| @@ ) ";"`
 }
 
@@ -38,6 +39,10 @@ type IfStatement struct {
 type WhileStatement struct {
 	Cond *Expression     `"while" @@ `
 	Body *BlockStatement `@@`
+}
+
+type ReturnStatement struct {
+	Value *Expression `"return" @@`
 }
 
 type Expression struct {

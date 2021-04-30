@@ -96,13 +96,12 @@ func (e *Expression) Eval(ctx Context) Value {
 }
 
 func (e *ComparisonExpression) Eval(ctx Context) Value {
-	lhs := e.Lhs.Eval(ctx).(Integer)
 	if e.Op == nil {
-		return lhs
+		return e.Lhs.Eval(ctx)
 	}
 
+	lhs := e.Lhs.Eval(ctx).(Integer)
 	rhs := e.Rhs.Eval(ctx).(Integer)
-
 	var result bool
 	switch *e.Op {
 	case "==":
@@ -123,8 +122,11 @@ func (e *ComparisonExpression) Eval(ctx Context) Value {
 }
 
 func (e *AdditionExpression) Eval(ctx Context) Value {
-	lhs := e.Lhs.Eval(ctx).(Integer)
+	if len(e.Rhs) == 0 {
+		return e.Lhs.Eval(ctx)
+	}
 
+	lhs := e.Lhs.Eval(ctx).(Integer)
 	for _, rhs := range e.Rhs {
 		op := *rhs.Op
 		rhs := rhs.Mul.Eval(ctx).(Integer)
@@ -140,8 +142,11 @@ func (e *AdditionExpression) Eval(ctx Context) Value {
 }
 
 func (e *MultiplicationExpression) Eval(ctx Context) Value {
-	lhs := e.Lhs.Eval(ctx).(Integer)
+	if len(e.Rhs) == 0 {
+		return e.Lhs.Eval(ctx)
+	}
 
+	lhs := e.Lhs.Eval(ctx).(Integer)
 	for _, rhs := range e.Rhs {
 		op := *rhs.Op
 		rhs := rhs.Term.Eval(ctx).(Integer)
@@ -166,7 +171,13 @@ func (t *TermExpression) Eval(ctx Context) Value {
 		return NewInteger(*t.Number)
 	case t.Expression != nil:
 		return t.Expression.Eval(ctx)
+	case t.Function != nil:
+		return t.Function.Eval(ctx)
 	}
 
 	panic("unreachable")
+}
+
+func (f *FunctionExpression) Eval(ctx Context) Value {
+	return NewFunction(f.Body)
 }

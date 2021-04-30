@@ -11,6 +11,7 @@ type ValueType int
 
 const (
 	VOID    ValueType = iota
+	BOOLEAN ValueType = iota
 	INTEGER ValueType = iota
 )
 
@@ -26,6 +27,20 @@ func (v *Void) Type() ValueType {
 
 func (v *Void) String() string {
 	return "void"
+}
+
+type Boolean bool
+
+func NewBoolean(b bool) Value {
+	return Boolean(b)
+}
+
+func (b Boolean) Type() ValueType {
+	return BOOLEAN
+}
+
+func (b Boolean) String() string {
+	return fmt.Sprintf("%t", b)
 }
 
 type Integer int

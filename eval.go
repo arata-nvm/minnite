@@ -52,10 +52,10 @@ func (s *PrintStatement) Eval(ctx Context) Value {
 }
 
 func (s *IfStatement) Eval(ctx Context) Value {
-	cond := s.Cond.Eval(ctx).(Integer)
+	cond := s.Cond.Eval(ctx).(Boolean)
 	result := NewVoid()
 
-	if cond != 0 {
+	if cond {
 		result = s.Then.Eval(ctx)
 	} else if s.Else != nil {
 		result = s.Else.Eval(ctx)
@@ -66,8 +66,8 @@ func (s *IfStatement) Eval(ctx Context) Value {
 
 func (s *WhileStatement) Eval(ctx Context) Value {
 	for {
-		cond := s.Cond.Eval(ctx).(Integer)
-		if cond == 0 {
+		cond := s.Cond.Eval(ctx).(Boolean)
+		if !cond {
 			break
 		}
 
@@ -109,11 +109,7 @@ func (e *ComparisonExpression) Eval(ctx Context) Value {
 		result = lhs >= rhs
 	}
 
-	if result {
-		return NewInteger(1)
-	} else {
-		return NewInteger(0)
-	}
+	return NewBoolean(result)
 }
 
 func (e *AdditionExpression) Eval(ctx Context) Value {

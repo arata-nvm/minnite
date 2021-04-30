@@ -10,9 +10,10 @@ type Value interface {
 type ValueType int
 
 const (
-	VOID    ValueType = iota
-	BOOLEAN ValueType = iota
-	INTEGER ValueType = iota
+	VOID     ValueType = iota
+	BOOLEAN  ValueType = iota
+	INTEGER  ValueType = iota
+	FUNCTION ValueType = iota
 )
 
 type Void struct{}
@@ -55,4 +56,22 @@ func (i Integer) Type() ValueType {
 
 func (i Integer) String() string {
 	return fmt.Sprintf("%d", i)
+}
+
+type Function struct {
+	Body *BlockStatement
+}
+
+func NewFunction(body *BlockStatement) Value {
+	return &Function{
+		Body: body,
+	}
+}
+
+func (f *Function) Type() ValueType {
+	return FUNCTION
+}
+
+func (f *Function) String() string {
+	return "func"
 }

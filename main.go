@@ -22,7 +22,7 @@ func repl() {
 		fmt.Print("> ")
 		line, _ := reader.ReadString('\n')
 		result := Exec(line, ctx)
-		fmt.Printf("%d\n", result)
+		fmt.Printf("%v\n", result)
 	}
 }
 

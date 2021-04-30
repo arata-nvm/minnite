@@ -2,10 +2,10 @@ package main
 
 import "fmt"
 
-type Context map[string]int
+type Context map[string]Value
 
-func (p *Program) Eval(ctx Context) int {
-	result := 0
+func (p *Program) Eval(ctx Context) Value {
+	result := NewInteger(0)
 
 	for _, stmt := range p.Statements {
 		result = stmt.Eval(ctx)
@@ -14,7 +14,7 @@ func (p *Program) Eval(ctx Context) int {
 	return result
 }
 
-func (s *Statement) Eval(ctx Context) int {
+func (s *Statement) Eval(ctx Context) Value {
 	switch {
 	case s.Let != nil:
 		s.Let.Eval(ctx)
@@ -28,11 +28,11 @@ func (s *Statement) Eval(ctx Context) int {
 		return s.Expression.Eval(ctx)
 	}
 
-	return 0
+	return NewInteger(0)
 }
 
-func (s *BlockStatement) Eval(ctx Context) int {
-	result := 0
+func (s *BlockStatement) Eval(ctx Context) Value {
+	result := NewInteger(0)
 
 	for _, stmt := range s.Body {
 		result = stmt.Eval(ctx)
@@ -49,9 +49,9 @@ func (s *PrintStatement) Eval(ctx Context) {
 	fmt.Printf("%d\n", s.Value.Eval(ctx))
 }
 
-func (s *IfStatement) Eval(ctx Context) int {
-	cond := s.Cond.Eval(ctx)
-	result := 0
+func (s *IfStatement) Eval(ctx Context) Value {
+	cond := s.Cond.Eval(ctx).(Integer)
+	result := NewInteger(0)
 
 	if cond != 0 {
 		result = s.Then.Eval(ctx)
@@ -64,7 +64,7 @@ func (s *IfStatement) Eval(ctx Context) int {
 
 func (s *WhileStatement) Eval(ctx Context) {
 	for {
-		cond := s.Cond.Eval(ctx)
+		cond := s.Cond.Eval(ctx).(Integer)
 		if cond == 0 {
 			break
 		}
@@ -74,21 +74,21 @@ func (s *WhileStatement) Eval(ctx Context) {
 
 }
 
-func (s *ExpressionStatement) Eval(ctx Context) int {
+func (s *ExpressionStatement) Eval(ctx Context) Value {
 	return s.Expression.Eval(ctx)
 }
 
-func (e *Expression) Eval(ctx Context) int {
+func (e *Expression) Eval(ctx Context) Value {
 	return e.Expression.Eval(ctx)
 }
 
-func (e *ComparisonExpression) Eval(ctx Context) int {
-	lhs := e.Lhs.Eval(ctx)
+func (e *ComparisonExpression) Eval(ctx Context) Value {
+	lhs := e.Lhs.Eval(ctx).(Integer)
 	if e.Op == nil {
 		return lhs
 	}
 
-	rhs := e.Rhs.Eval(ctx)
+	rhs := e.Rhs.Eval(ctx).(Integer)
 
 	var result bool
 	switch *e.Op {
@@ -107,53 +107,57 @@ func (e *ComparisonExpression) Eval(ctx Context) int {
 	}
 
 	if result {
-		return 1
+		return NewInteger(1)
 	} else {
-		return 0
+		return NewInteger(0)
 	}
 }
 
-func (e *AdditionExpression) Eval(ctx Context) int {
-	lhs := e.Lhs.Eval(ctx)
+func (e *AdditionExpression) Eval(ctx Context) Value {
+	lhs := e.Lhs.Eval(ctx).(Integer)
 
 	for _, rhs := range e.Rhs {
-		switch *rhs.Op {
+		op := *rhs.Op
+		rhs := rhs.Mul.Eval(ctx).(Integer)
+		switch op {
 		case "+":
-			lhs += rhs.Mul.Eval(ctx)
+			lhs += rhs
 		case "-":
-			lhs -= rhs.Mul.Eval(ctx)
+			lhs -= rhs
 		}
 	}
 
 	return lhs
 }
 
-func (e *MultiplicationExpression) Eval(ctx Context) int {
-	lhs := e.Lhs.Eval(ctx)
+func (e *MultiplicationExpression) Eval(ctx Context) Value {
+	lhs := e.Lhs.Eval(ctx).(Integer)
 
 	for _, rhs := range e.Rhs {
-		switch *rhs.Op {
+		op := *rhs.Op
+		rhs := rhs.Term.Eval(ctx).(Integer)
+		switch op {
 		case "*":
-			lhs *= rhs.Term.Eval(ctx)
+			lhs *= rhs
 		case "/":
-			lhs /= rhs.Term.Eval(ctx)
+			lhs /= rhs
 		case "%":
-			lhs %= rhs.Term.Eval(ctx)
+			lhs %= rhs
 		}
 	}
 
 	return lhs
 }
 
-func (t *TermExpression) Eval(ctx Context) int {
+func (t *TermExpression) Eval(ctx Context) Value {
 	switch {
 	case t.Variable != nil:
 		return ctx[*t.Variable]
 	case t.Number != nil:
-		return *t.Number
+		return NewInteger(*t.Number)
 	case t.Expression != nil:
 		return t.Expression.Eval(ctx)
 	}
 
-	return 0
+	return NewInteger(0)
 }

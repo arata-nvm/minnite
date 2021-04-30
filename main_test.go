@@ -29,8 +29,8 @@ func TestExec(t *testing.T) {
 
 	for _, test := range tests {
 		ctx := Context{}
-		actual := Exec(test.input, ctx)
-		if actual != test.expected {
+		actual := Exec(test.input, ctx).(Integer)
+		if int(actual) != test.expected {
 			t.Errorf("[FAILED] `%s` -> %d\n", test.input, actual)
 		}
 	}

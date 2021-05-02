@@ -26,6 +26,8 @@ func (s *Statement) Eval(ctx Context) Value {
 		return s.While.Eval(ctx)
 	case s.Return != nil:
 		return s.Return.Eval(ctx)
+	case s.Assign != nil:
+		return s.Assign.Eval(ctx)
 	case s.Expression != nil:
 		return s.Expression.Eval(ctx)
 	}
@@ -85,6 +87,11 @@ func (s *WhileStatement) Eval(ctx Context) Value {
 
 func (s *ReturnStatement) Eval(ctx Context) Value {
 	return s.Value.Eval(ctx)
+}
+
+func (s *AssignStatement) Eval(ctx Context) Value {
+	ctx[s.Variable] = s.Value.Eval(ctx)
+	return NewVoid()
 }
 
 func (s *ExpressionStatement) Eval(ctx Context) Value {

@@ -10,6 +10,7 @@ type Statement struct {
 	If         *IfStatement         `| @@ `
 	While      *WhileStatement      `| @@ `
 	Return     *ReturnStatement     `| @@ `
+	Assign     *AssignStatement     `| @@ `
 	Expression *ExpressionStatement `| @@ ) ";"`
 }
 
@@ -43,6 +44,11 @@ type WhileStatement struct {
 
 type ReturnStatement struct {
 	Value *Expression `"return" @@`
+}
+
+type AssignStatement struct {
+	Variable string      `@Ident`
+	Value    *Expression `"=" @@`
 }
 
 type Expression struct {

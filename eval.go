@@ -181,10 +181,19 @@ func (t *TermExpression) Eval(ctx Context) Value {
 }
 
 func (f *FunctionExpression) Eval(ctx Context) Value {
-	return NewFunction(f.Body)
+	return NewFunction(f.Params, f.Body)
 }
 
 func (c *CallExpression) Eval(ctx Context) Value {
 	f := ctx[*c.Name].(*Function)
+
+	if len(f.Params) != len(c.Args) {
+		panic(fmt.Sprintf("%d個の引数に対し、%d個の値が与えられています", len(f.Params), len(c.Args)))
+	}
+
+	for i, param := range f.Params {
+		ctx[param] = c.Args[i].Eval(ctx)
+	}
+
 	return f.Body.Eval(ctx)
 }

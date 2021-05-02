@@ -59,12 +59,14 @@ func (i Integer) String() string {
 }
 
 type Function struct {
-	Body *BlockStatement
+	Params []string
+	Body   *BlockStatement
 }
 
-func NewFunction(body *BlockStatement) Value {
+func NewFunction(params []string, body *BlockStatement) Value {
 	return &Function{
-		Body: body,
+		Params: params,
+		Body:   body,
 	}
 }
 

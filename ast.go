@@ -84,9 +84,11 @@ type TermExpression struct {
 }
 
 type FunctionExpression struct {
-	Body *BlockStatement `"func" "(" ")" @@`
+	Params []string        `"func" "(" ( @Ident ( "," @Ident )* )? ")"`
+	Body   *BlockStatement `@@`
 }
 
 type CallExpression struct {
-	Name *string `@Ident "(" ")"`
+	Name *string       `@Ident`
+	Args []*Expression `"(" ( @@ ( "," @@ )* )? ")"`
 }

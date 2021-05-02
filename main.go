@@ -36,7 +36,7 @@ func parse(s string) *Program {
 		{`Ident`, `[a-zA-Z][a-zA-Z_\d]*`, nil},
 		{`Number`, `\d+`, nil},
 		{`Operator`, `(==|!=|<=|<|>=|>)`, nil},
-		{`Punct`, `[+\-*/%()=?;{}]`, nil},
+		{`Punct`, `[+\-*/%()=?;{},]`, nil},
 		{"whitespace", `[\n\r\s]+`, nil},
 	})
 

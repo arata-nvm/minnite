@@ -183,6 +183,8 @@ func (t *TermExpression) Eval(ctx *Context) Value {
 		return t.Call.Eval(ctx)
 	case t.List != nil:
 		return t.List.Eval(ctx)
+	case t.Index != nil:
+		return t.Index.Eval(ctx)
 	}
 
 	panic("unreachable")
@@ -215,4 +217,11 @@ func (l *ListExpression) Eval(ctx *Context) Value {
 	}
 
 	return NewList(items)
+}
+
+func (i *IndexExpression) Eval(ctx *Context) Value {
+	value := ctx.FindVariable(*i.Variable).(*List)
+	index := i.Index.Eval(ctx).(Integer)
+
+	return value.Items[index]
 }

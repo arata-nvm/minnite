@@ -32,6 +32,7 @@ func TestExec(t *testing.T) {
 		{"let hoge = 1; hoge = 2; hoge;", NewInteger(2)},
 		{"let a = 2; let hoge = func() { let a = 4; return a; }; hoge() + a;", NewInteger(6)},
 		{"let fib = func(x) { if x <= 1 { return 1; } else { return fib(x - 1) + fib(x - 2); }; }; fib(5);", NewInteger(8)},
+		{"let a = [1, 2, 3]; a[0] + a[1] + a[2];", NewInteger(6)},
 	}
 
 	for _, test := range tests {

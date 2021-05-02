@@ -35,11 +35,13 @@ func TestExec(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		ctx := Context{}
-		actual := Exec(test.input, ctx)
-		if actual != test.expected {
-			t.Errorf("[FAILED] `%s` -> %d\n", test.input, actual)
-		}
+		t.Run(test.input, func(t *testing.T) {
+			ctx := NewContext()
+			actual := Exec(test.input, ctx)
+			if actual != test.expected {
+				t.Errorf("[FAILED] `%s` -> %d\n", test.input, actual)
+			}
+		})
 	}
 
 }

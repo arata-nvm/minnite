@@ -15,7 +15,7 @@ func main() {
 }
 
 func repl() {
-	ctx := Context{}
+	ctx := NewContext()
 
 	reader := bufio.NewReader(os.Stdin)
 	for {
@@ -26,7 +26,7 @@ func repl() {
 	}
 }
 
-func Exec(s string, ctx Context) Value {
+func Exec(s string, ctx *Context) Value {
 	program := parse(s)
 	return program.Eval(ctx)
 }

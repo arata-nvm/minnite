@@ -181,6 +181,8 @@ func (t *TermExpression) Eval(ctx *Context) Value {
 		return t.Function.Eval(ctx)
 	case t.Call != nil:
 		return t.Call.Eval(ctx)
+	case t.List != nil:
+		return t.List.Eval(ctx)
 	}
 
 	panic("unreachable")
@@ -203,4 +205,14 @@ func (c *CallExpression) Eval(ctx *Context) Value {
 	}
 
 	return f.Body.Eval(newCtx)
+}
+
+func (l *ListExpression) Eval(ctx *Context) Value {
+	items := []Value{}
+
+	for _, item := range l.Items {
+		items = append(items, item.Eval(ctx))
+	}
+
+	return NewList(items)
 }

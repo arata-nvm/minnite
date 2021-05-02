@@ -83,6 +83,7 @@ type OpMultiplicationExpression struct {
 
 type TermExpression struct {
 	Expression *Expression         `( "(" @@ ")" )`
+	List       *ListExpression     `| @@ `
 	Function   *FunctionExpression `| @@`
 	Call       *CallExpression     `| @@`
 	Variable   *string             `| @Ident`
@@ -97,4 +98,8 @@ type FunctionExpression struct {
 type CallExpression struct {
 	Name *string       `@Ident`
 	Args []*Expression `"(" ( @@ ( "," @@ )* )? ")"`
+}
+
+type ListExpression struct {
+	Items []*Expression `"[" ( @@ ( "," @@ )* )? "]"`
 }

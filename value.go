@@ -14,6 +14,7 @@ const (
 	BOOLEAN  ValueType = iota
 	INTEGER  ValueType = iota
 	FUNCTION ValueType = iota
+	LIST     ValueType = iota
 )
 
 type Void struct{}
@@ -76,4 +77,20 @@ func (f *Function) Type() ValueType {
 
 func (f *Function) String() string {
 	return "func"
+}
+
+type List struct {
+	Items []Value
+}
+
+func NewList(items []Value) Value {
+	return &List{Items: items}
+}
+
+func (l *List) Type() ValueType {
+	return LIST
+}
+
+func (l *List) String() string {
+	return "list"
 }

@@ -8,6 +8,7 @@ import (
 
 	"github.com/alecthomas/participle/v2"
 	"github.com/alecthomas/participle/v2/lexer/stateful"
+	. "github.com/arata-nvm/minnite/minnite"
 )
 
 func main() {
@@ -21,12 +22,12 @@ func repl() {
 	for {
 		fmt.Print("> ")
 		line, _ := reader.ReadString('\n')
-		result := Exec(line, ctx)
+		result := exec(line, ctx)
 		fmt.Printf("%v\n", result)
 	}
 }
 
-func Exec(s string, ctx *Context) Value {
+func exec(s string, ctx *Context) Value {
 	program := parse(s)
 	return program.Eval(ctx)
 }

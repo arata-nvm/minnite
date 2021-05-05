@@ -1,4 +1,4 @@
-package main
+package minnite
 
 import "fmt"
 
@@ -10,11 +10,9 @@ type Value interface {
 type ValueType int
 
 const (
-	VOID     ValueType = iota
-	BOOLEAN  ValueType = iota
-	INTEGER  ValueType = iota
-	FUNCTION ValueType = iota
-	LIST     ValueType = iota
+	VOID    ValueType = iota
+	BOOLEAN ValueType = iota
+	INTEGER ValueType = iota
 )
 
 type Void struct{}
@@ -57,40 +55,4 @@ func (i Integer) Type() ValueType {
 
 func (i Integer) String() string {
 	return fmt.Sprintf("%d", i)
-}
-
-type Function struct {
-	Params []string
-	Body   *BlockStatement
-}
-
-func NewFunction(params []string, body *BlockStatement) Value {
-	return &Function{
-		Params: params,
-		Body:   body,
-	}
-}
-
-func (f *Function) Type() ValueType {
-	return FUNCTION
-}
-
-func (f *Function) String() string {
-	return "func"
-}
-
-type List struct {
-	Items []Value
-}
-
-func NewList(items []Value) Value {
-	return &List{Items: items}
-}
-
-func (l *List) Type() ValueType {
-	return LIST
-}
-
-func (l *List) String() string {
-	return "list"
 }

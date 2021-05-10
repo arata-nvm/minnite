@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 type Value interface {
 	Type() ValueType
@@ -15,6 +18,7 @@ const (
 	INTEGER  ValueType = iota
 	FUNCTION ValueType = iota
 	LIST     ValueType = iota
+	STRING   ValueType = iota
 )
 
 type Void struct{}
@@ -93,4 +97,20 @@ func (l *List) Type() ValueType {
 
 func (l *List) String() string {
 	return "list"
+}
+
+type String string
+
+func NewString(s string) Value {
+	// 前後の"を除去する
+	content := strings.TrimSuffix(strings.TrimPrefix(s, "\""), "\"")
+	return String(content)
+}
+
+func (s String) Type() ValueType {
+	return STRING
+}
+
+func (s String) String() string {
+	return string(s)
 }

@@ -89,6 +89,7 @@ type TermExpression struct {
 	Call       *CallExpression     `| @@`
 	Variable   *string             `| @Ident`
 	Number     *int                `| @Number`
+	String     *string             `| @String`
 }
 
 type FunctionExpression struct {

@@ -175,6 +175,8 @@ func (t *TermExpression) Eval(ctx *Context) Value {
 		return ctx.FindVariable(*t.Variable)
 	case t.Number != nil:
 		return NewInteger(*t.Number)
+	case t.String != nil:
+		return NewString(*t.String)
 	case t.Expression != nil:
 		return t.Expression.Eval(ctx)
 	case t.Function != nil:

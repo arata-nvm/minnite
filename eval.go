@@ -54,7 +54,7 @@ func (s *LetStatement) Eval(ctx *Context) Value {
 }
 
 func (s *PrintStatement) Eval(ctx *Context) Value {
-	fmt.Printf("%d\n", s.Value.Eval(ctx))
+	fmt.Printf("%v\n", s.Value.Eval(ctx))
 	return NewVoid()
 }
 

@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"strings"
 )
 
 type Value interface {
@@ -102,9 +101,7 @@ func (l *List) String() string {
 type String string
 
 func NewString(s string) Value {
-	// 前後の"を除去する
-	content := strings.TrimSuffix(strings.TrimPrefix(s, "\""), "\"")
-	return String(content)
+	return String(s)
 }
 
 func (s String) Type() ValueType {

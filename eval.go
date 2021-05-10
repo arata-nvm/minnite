@@ -1,6 +1,10 @@
 package main
 
-import "fmt"
+import (
+	"bytes"
+	"fmt"
+	"strings"
+)
 
 func (p *Program) Eval(ctx *Context) Value {
 	result := NewVoid()
@@ -176,7 +180,7 @@ func (t *TermExpression) Eval(ctx *Context) Value {
 	case t.Number != nil:
 		return NewInteger(*t.Number)
 	case t.String != nil:
-		return NewString(*t.String)
+		return EvalString(*t.String, ctx)
 	case t.Expression != nil:
 		return t.Expression.Eval(ctx)
 	case t.Function != nil:
@@ -190,6 +194,38 @@ func (t *TermExpression) Eval(ctx *Context) Value {
 	}
 
 	panic("unreachable")
+}
+
+func EvalString(s string, ctx *Context) Value {
+	// 前後の"を除去する
+	content := strings.TrimSuffix(strings.TrimPrefix(s, "\""), "\"")
+
+	if !strings.Contains(content, "$") {
+		return NewString(content)
+	}
+
+	var buf bytes.Buffer
+	for i := 0; i < len(content); i++ {
+		c := content[i]
+		switch c {
+		case '$':
+			nextSpace := strings.IndexByte(content[i:], ' ')
+			if nextSpace == -1 {
+				nextSpace = len(content)
+			} else {
+				nextSpace += i
+			}
+
+			varName := content[i+1 : nextSpace]
+			buf.WriteString(ctx.FindVariable(varName).String())
+
+			i = nextSpace - 1
+		default:
+			buf.WriteByte(c)
+		}
+	}
+
+	return NewString(buf.String())
 }
 
 func (f *FunctionExpression) Eval(ctx *Context) Value {

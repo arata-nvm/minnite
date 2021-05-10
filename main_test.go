@@ -34,6 +34,7 @@ func TestExec(t *testing.T) {
 		{"let fib = func(x) { if x <= 1 { return 1 } else { return fib(x - 1) + fib(x - 2) } }; fib(5)", NewInteger(8)},
 		{"let a = [1, 2, 3]; a[0] + a[1] + a[2]", NewInteger(6)},
 		{"\"hoge\"", NewString("hoge")},
+		{"let aa = 1; \"$aa $aa $aa\"", NewString("1 1 1")},
 	}
 
 	for _, test := range tests {

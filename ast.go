@@ -11,7 +11,7 @@ type Statement struct {
 	While      *WhileStatement      `| @@ `
 	Return     *ReturnStatement     `| @@ `
 	Assign     *AssignStatement     `| @@ `
-	Expression *ExpressionStatement `| @@ ) ";"`
+	Expression *ExpressionStatement `| @@ ) [ ";" ]`
 }
 
 type BlockStatement struct {
